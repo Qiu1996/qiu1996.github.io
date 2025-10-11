@@ -26,12 +26,23 @@
     -ms-user-select: none;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     font-family: 'JetBrainsMono', monospace;
     color: #1f2328;
     background: #ffffff;
     line-height: 1.6;
     cursor: default;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 
 a {
@@ -273,6 +284,7 @@ header nav {
     font-weight: 600;
     margin: 0;
     color: #1f2328;
+    font-size: 22px;
 }
 
 .archive-post-item .post-meta {

@@ -6,12 +6,12 @@
   
   <title>文章標題 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="技術棧背景交代前後端技術  前端框架: Vue.js 3（畫面渲染） 應用框架: Nuxt.js（路由、建構） 後端框架: FastAPI（API、商業邏輯）  架構模式  開發環境: 前後端分離開發  前端: npm run dev (Vite dev server) 後端: uvicorn main:app --reload   生產環境: 靜態前端 + API 服務器一體化部署  前端編譯:">
+  <meta name="description" content="技術棧背景交代 前後端技術  前端框架: Vue.js 3（畫面渲染） 應用框架: Nuxt.js（路由、建構） 後端框架: FastAPI（API、商業邏輯）  架構模式   開發環境: 前後端分離開發  前端: npm run dev (Vite dev server) 後端: uvicorn main:app --reload    生產環境: 靜態前端 + API 服務器一體化部署  前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="文章標題">
 <meta property="og:url" content="http://example.com/2025/10/11/%E6%96%87%E7%AB%A0%E6%A8%99%E9%A1%8C/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="技術棧背景交代前後端技術  前端框架: Vue.js 3（畫面渲染） 應用框架: Nuxt.js（路由、建構） 後端框架: FastAPI（API、商業邏輯）  架構模式  開發環境: 前後端分離開發  前端: npm run dev (Vite dev server) 後端: uvicorn main:app --reload   生產環境: 靜態前端 + API 服務器一體化部署  前端編譯:">
+<meta property="og:description" content="技術棧背景交代 前後端技術  前端框架: Vue.js 3（畫面渲染） 應用框架: Nuxt.js（路由、建構） 後端框架: FastAPI（API、商業邏輯）  架構模式   開發環境: 前後端分離開發  前端: npm run dev (Vite dev server) 後端: uvicorn main:app --reload    生產環境: 靜態前端 + API 服務器一體化部署  前端">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-10-11T04:12:06.000Z">
 <meta property="article:modified_time" content="2025-10-11T04:13:23.219Z">
@@ -95,7 +95,8 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h2 id="技術棧背景交代"><a href="#技術棧背景交代" class="headerlink" title="技術棧背景交代"></a>技術棧背景交代</h2><p><strong>前後端技術</strong></p>
+        <h2 id="技術棧背景交代">技術棧背景交代</h2>
+<p><strong>前後端技術</strong></p>
 <ul>
 <li><strong>前端框架</strong>: Vue.js 3（畫面渲染）</li>
 <li><strong>應用框架</strong>: Nuxt.js（路由、建構）</li>
@@ -103,13 +104,15 @@
 </ul>
 <p><strong>架構模式</strong></p>
 <ul>
-<li><p><strong>開發環境</strong>: 前後端分離開發</p>
+<li>
+<p><strong>開發環境</strong>: 前後端分離開發</p>
 <ul>
 <li>前端: <code>npm run dev</code> (Vite dev server)</li>
 <li>後端: <code>uvicorn main:app --reload</code></li>
 </ul>
 </li>
-<li><p><strong>生產環境</strong>: 靜態前端 + API 服務器一體化部署</p>
+<li>
+<p><strong>生產環境</strong>: 靜態前端 + API 服務器一體化部署</p>
 <ul>
 <li>前端編譯: <code>npm run generate</code> → 靜態文件</li>
 <li>部署方式: FastAPI 統一託管靜態文件與 API</li>
@@ -118,7 +121,8 @@
 </li>
 </ul>
 <hr>
-<h2 id="環境建置步驟"><a href="#環境建置步驟" class="headerlink" title="環境建置步驟"></a>環境建置步驟</h2><p><strong>建構開發環境</strong></p>
+<h2 id="環境建置步驟">環境建置步驟</h2>
+<p><strong>建構開發環境</strong></p>
 <ol>
 <li>建立虛擬環境 : <code>uv init</code></li>
 <li>安裝 fastapi 跟 fastapi 的伺服器 uvicorn :  <code>uv add fastapi uvicorn</code></li>
@@ -137,17 +141,21 @@
 <li>運行 FastAPI 伺服器後，會在這個網址出現 Nuxt 的成功畫面。</li>
 </ol>
 <hr>
-<h2 id="問題集合"><a href="#問題集合" class="headerlink" title="問題集合"></a>問題集合</h2><ol>
-<li><p>Nuxt 在 SSR 渲染模式下，沒有生成 FastAPI 可用的 HTML 檔。</p>
+<h2 id="問題集合">問題集合</h2>
+<ol>
+<li>
+<p>Nuxt 在 SSR 渲染模式下，沒有生成 FastAPI 可用的 HTML 檔。</p>
 <ul>
-<li><p><strong>初始問題</strong></p>
+<li>
+<p><strong>初始問題</strong></p>
 <ul>
-<li>Nuxt 的渲染模式預設為 &#x3D;&#x3D;[^1]SSR（伺服器端渲染）&#x3D;&#x3D;。</li>
+<li>Nuxt 的渲染模式預設為 <mark><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>SSR（伺服器端渲染）</mark>。</li>
 <li>需要使用 Node.js 執行 JavaScript 來渲染 Vue 元件。</li>
 <li>由於 FastAPI 是 Python 框架，不支援 Nuxt 的 SSR 模式。</li>
 </ul>
 </li>
-<li><p><strong>解決辦法：</strong></p>
+<li>
+<p><strong>解決辦法：</strong></p>
 <ul>
 <li>在 <code>nuxt.config.ts</code> 中關閉 SSR 模式。</li>
 <li>改用 SSG（靜態生成）或 SPA（單頁應用）模式。</li>
@@ -156,15 +164,20 @@
 </li>
 </ul>
 </li>
-<li><p>關閉 SSR 模式之後，使用 <code>build</code> 依然不會生成 HTML，需要把指令改成 <code>generate</code> 。</p>
+<li>
+<p>關閉 SSR 模式之後，使用 <code>build</code> 依然不會生成 HTML，需要把指令改成 <code>generate</code> 。</p>
 <ul>
-<li><strong>修改成 <code>ssr: false</code>後：</strong> <ul>
-<li><code>npm run build</code> 會生成 <code>SPA (Single Page Application)</code><br>   模式的文件</li>
+<li><strong>修改成 <code>ssr: false</code>後：</strong>
+<ul>
+<li><code>npm run build</code> 會生成 <code>SPA (Single Page Application)</code><br>
+模式的文件</li>
 <li><code>npm run generate</code> 會生成 靜態 <code>HTML + SPA</code> 的混合模式</li>
 </ul>
 </li>
-<li><strong>兩個指令的差異：</strong><ul>
-<li><p><code>npm run build</code></p>
+<li><strong>兩個指令的差異：</strong>
+<ul>
+<li>
+<p><code>npm run build</code></p>
 <ul>
 <li>用於 SSR (Server-Side Rendering) 模式</li>
 <li>生成需要 Node.js 服務器運行的應用</li>
@@ -173,7 +186,8 @@
 <li>適合動態內容、需要服務器端渲染的應用</li>
 </ul>
 </li>
-<li><p><code>npm run generate</code></p>
+<li>
+<p><code>npm run generate</code></p>
 <ul>
 <li>用於 靜態站點生成 (Static Site Generation, SSG)</li>
 <li>預渲染所有路由，生成純靜態文件（HTML、CSS、JS）</li>
@@ -186,14 +200,16 @@
 </li>
 </ul>
 </li>
-<li><p>HTML 中的資源（JS &#x2F; CSS）路徑與 FastAPI 掛載的路徑不符合</p>
+<li>
+<p>HTML 中的資源（JS / CSS）路徑與 FastAPI 掛載的路徑不符合</p>
 <ul>
-<li><strong>說明</strong><ul>
+<li><strong>說明</strong>
+<ul>
 <li>在 FastAPI 掛載 Nuxt 生成的靜態檔案時，我是掛載在 <code>/statci</code> 的網址路徑下：</li>
 </ul>
   <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.mount(<span class="string">&quot;/static&quot;</span>, StaticFiles(directory=<span class="string">&quot;frontend/.output/public&quot;</span>, html=<span class="literal">True</span>), name=<span class="string">&quot;static&quot;</span>)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>而 &#x3D;&#x3D;[^2]Nuxt 生成靜態檔案裡，預設生成的資源路徑&#x3D;&#x3D;是絕對路徑：<code>/_nuxt/....</code></li>
+<li>而 <mark><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>Nuxt 生成靜態檔案裡，預設生成的資源路徑</mark>是絕對路徑：<code>/_nuxt/....</code></li>
 <li>所以瀏覽器會像 FastAPI 發送這個請求：<code>https://example.com/_nuxt/....</code></li>
 <li>但是 FastAPI 裡，我們掛載了 <code>/static</code> 這個網址路徑，所以它只處理 <code>/static</code> 開頭的這種請求：<code>https://example.com/static/_nuxt/....</code></li>
 </ul>
@@ -201,12 +217,20 @@
 </ul>
 </li>
 </ol>
-<p>[^1]:   [HTML 渲染模式：SSR、SSG、SPA]。<br>[^2]: 	[關於<code>baseURL</code> 路徑設定]。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>[HTML 渲染模式：SSR、SSG、SPA]。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>[關於<code>baseURL</code> 路徑設定]。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2025/10/11/%E6%96%87%E7%AB%A0%E6%A8%99%E9%A1%8C/" data-id="cuidlta6oT26-h1-gUSSaieCG" data-title="文章標題" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2025/10/11/%E6%96%87%E7%AB%A0%E6%A8%99%E9%A1%8C/" data-id="cuid1FPWrbyTPJT9np9du3VTg" data-title="文章標題" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       

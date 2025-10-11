@@ -15,7 +15,7 @@
     </div>
     <div class="blog-nav">
         <a href="/">首頁</a>
-        <a href="#">關於我</a>
+        <a href="/about/">關於我</a>
         <a href="/archives/">文章列表</a>
     </div>
 </nav>
@@ -25,9 +25,12 @@
         <div class="post-meta">
             <span>更新日期：2025-10-11</span>
         </div>
-        <h1>文章標題222</h1>
+        <h1>Nuxt.js + FastAPI</h1>
         <div class="post-content">
-            <p>這是文章的摘要部分，會顯示在首頁。</p>
+            <p>這是一個專案的開頭，因為沒有練FastAPI，想練Vue.js，又想學Nuxt.js，<br>
+接著又不想要前後分開部屬，所以前端的專案環境在後端的專案環境，<br>
+但神奇的是，前端只有Vue.js，後端有Nuxt.js(路由)跟FastAPI(資料)，<br>
+如果問我為什麼不改Node.js，因為暫時不想學，這只是我想要練習指定技術的合成獸。</p>
 <span id="more"></span>
 <h2 id="技術棧背景交代">技術棧背景交代</h2>
 <p><strong>前後端技術</strong></p>
@@ -78,17 +81,13 @@
 <h2 id="問題集合">問題集合</h2>
 <ol>
 <li>
-<p>Nuxt 在 SSR 渲染模式下，沒有生成 FastAPI 可用的 HTML 檔。</p>
-<ul>
-<li>
-<p><strong>初始問題</strong></p>
+<p>Nuxt 在 SSR 渲染模式下，沒有生成 FastAPI 可用的 HTML 檔。<br>
+<strong>初始問題：</strong></p>
 <ul>
 <li>Nuxt 的渲染模式預設為 <mark><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>SSR（伺服器端渲染）</mark>。</li>
 <li>需要使用 Node.js 執行 JavaScript 來渲染 Vue 元件。</li>
 <li>由於 FastAPI 是 Python 框架，不支援 Nuxt 的 SSR 模式。</li>
 </ul>
-</li>
-<li>
 <p><strong>解決辦法：</strong></p>
 <ul>
 <li>在 <code>nuxt.config.ts</code> 中關閉 SSR 模式。</li>
@@ -96,19 +95,15 @@
 <li>這樣 FastAPI 就能託管打包後的靜態檔案。</li>
 </ul>
 </li>
-</ul>
-</li>
 <li>
-<p>關閉 SSR 模式之後，使用 <code>build</code> 依然不會生成 HTML，需要把指令改成 <code>generate</code> 。</p>
-<ul>
-<li><strong>修改成 <code>ssr: false</code>後：</strong>
+<p>關閉 SSR 模式之後，使用 <code>build</code> 依然不會生成 HTML，需要把指令改成 <code>generate</code> 。<br>
+<strong>修改成 <code>ssr: false</code>後：</strong></p>
 <ul>
 <li><code>npm run build</code> 會生成 <code>SPA (Single Page Application)</code><br>
 模式的文件</li>
 <li><code>npm run generate</code> 會生成 靜態 <code>HTML + SPA</code> 的混合模式</li>
 </ul>
-</li>
-<li><strong>兩個指令的差異：</strong>
+<p><strong>兩個指令的差異：</strong></p>
 <ul>
 <li>
 <p><code>npm run build</code></p>
@@ -132,23 +127,20 @@
 </li>
 </ul>
 </li>
-</ul>
+<li>
+<p>HTML 中的資源（JS / CSS）路徑與 FastAPI 掛載的路徑不符合<br>
+<strong>說明：</strong></p>
+<ul>
+<li>在 FastAPI 掛載 Nuxt 生成的靜態檔案時，我是掛載在 <code>/statci</code> 的網址路徑下： <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">app.mount(<span class="hljs-string">&quot;/static&quot;</span>, StaticFiles(directory=<span class="hljs-string">&quot;frontend/.output/public&quot;</span>, html=<span class="hljs-literal">True</span>), name=<span class="hljs-string">&quot;static&quot;</span>)<br></code></pre></td></tr></table></figure>
 </li>
-<li>
-<p>HTML 中的資源（JS / CSS）路徑與 FastAPI 掛載的路徑不符合</p>
-<ul>
-<li>
-<p><strong>說明</strong></p>
-<ul>
-<li>在 FastAPI 掛載 Nuxt 生成的靜態檔案時，我是掛載在 <code>/statci</code> 的網址路徑下：</li>
-</ul>
-  <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">app.mount(<span class="hljs-string">&quot;/static&quot;</span>, StaticFiles(directory=<span class="hljs-string">&quot;frontend/.output/public&quot;</span>, html=<span class="hljs-literal">True</span>), name=<span class="hljs-string">&quot;static&quot;</span>)<br></code></pre></td></tr></table></figure>
-<ul>
 <li>而 <mark><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>Nuxt 生成靜態檔案裡，預設生成的資源路徑</mark>是絕對路徑：<code>/_nuxt/....</code></li>
 <li>所以瀏覽器會像 FastAPI 發送這個請求：<code>https://example.com/_nuxt/....</code></li>
-<li>但是 FastAPI 裡，我們掛載了 <code>/static</code> 這個網址路徑，所以它只處理 <code>/static</code> 開頭的這種請求：<code>https://example.com/static/_nuxt/....</code></li>
+<li>但是 FastAPI 裡，我掛載了 <code>/static</code> 這個網址路徑，所以它只處理 <code>/static</code> 開頭的這種請求：<code>https://example.com/static/_nuxt/....</code></li>
 </ul>
-</li>
+<p><strong>解決辦法：</strong></p>
+<ul>
+<li><strong>方案一：</strong> 修改 FastAPI 裡，掛載的網址路徑。</li>
+<li><strong>方案二：</strong> 也修改 Nuxt.js 的 <code>nuxt.config.ts</code> 裡的 <code>baseURL</code> 配置。</li>
 </ul>
 </li>
 </ol>

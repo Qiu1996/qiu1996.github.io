@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<title>I&#39;m defined</title>
+<link rel="icon" href="/images/favicon.ico">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CRS2BQJ19C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CRS2BQJ19C');
+</script>
+
+<meta name="generator" content="Hexo 8.0.0"></head>
+<body>
+    <header>
+<nav>
+    <div class="blog-name">
+        <a href="/">I'm Defined</a>
+    </div>
+    <div class="blog-nav">
+        <a href="/">首頁</a>
+        <a href="/about/">關於我</a>
+        <a href="/archives/">文章列表</a>
+    </div>
+</nav>
+</header>
+    <main>
+        <article class="post-article">
+    <header class="post-header">
+        <div class="post-meta">
+            <span>更新日期：2025-10-17</span>
+        </div>
+        <h1>手動配置Vite + Vue + Electron 開發環境</h1>
+        <div class="post-content">
+            <p>手動配置的意義是，不讓vite生成一堆檔案結構，一步步慢慢手動建構，需要什麼就自己設定的那種。</p>
+<span id="more"></span>
+<h2 id="技術棧">技術棧</h2>
+<ul>
+<li>開發環境工具：Vite</li>
+<li>桌面框架：Electron</li>
+<li>UI框架：Vue</li>
+</ul>
+<h2 id="建置步驟">建置步驟</h2>
+<h3 id="初始化起手">初始化起手</h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm init -y <br></code></pre></td></tr></table></figure>
+<h3 id="Vite-開發伺服器-和-打包工具">Vite - 開發伺服器 和 打包工具</h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install --save-dev vite<br></code></pre></td></tr></table></figure>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://vite.dev/guide/#scaffolding-your-first-vite-project">Vite 也有快速建置的指令</a></li>
+<li>Vite 是預設運行根目錄的 <code>index.html</code></li>
+</ul>
+<h4 id="Vite-的運行">Vite 的運行</h4>
+<ol>
+<li>可以在<code>package.json</code>裡面寫<code>script</code>，這樣就可以用<code>npm run dev</code> 運行： <figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;script&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;vite&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>使用<code>npx vite dev</code>運行。</li>
+</ol>
+<h3 id="Vue-前端框架">Vue - 前端框架</h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install vue<br></code></pre></td></tr></table></figure>
+<h3 id="vitejs-plugin-vue-Vite-處理-Vue-文件的插件"><code>@vitejs/plugin-vue</code> - Vite 處理 Vue 文件的插件</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/guide/scaling-up/tooling.html#vitejs-plugin-vue">官方文件 Vue - @vitejs/plugin-vue</a></li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install @vitejs/plugin-vue<br></code></pre></td></tr></table></figure>
+<p>然後寫進<code>vite.config.js</code>，這也是按照<a target="_blank" rel="noopener" href="https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue">官方GitHub文檔</a></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> &#123; defineConfig &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span><br><span class="hljs-keyword">import</span> vue <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-vue&#x27;</span><br><br><span class="hljs-comment">// https://vite.dev/config/</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>(&#123;<br>	<span class="hljs-attr">plugins</span>: [<br>		<span class="hljs-title function_">vue</span>(),<br>	]<br>&#125;)<br></code></pre></td></tr></table></figure>
+<h3 id="Electron-桌面應用框架">Electron - 桌面應用框架</h3>
+<ul>
+<li>安裝  <figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install electron --save-dev<br></code></pre></td></tr></table></figure>
+</li>
+<li>在<code>package.json</code>配置入口  <figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;main&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;electron/main.js&quot;</span><span class="hljs-punctuation">,</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>按照<a target="_blank" rel="noopener" href="https://www.electronjs.org/zh/docs/latest/tutorial/tutorial-first-app#%E5%AE%8C%E6%95%B4%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81">文件</a>在<code>main.js</code>建立簡單的主進程配置</li>
+<li>運行方式是<code>vite</code>跟<code>electron</code>都要運行  <figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npx vite dev<br>npx electron .<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+
+        </div>
+    </header>
+</article>
+    </main>
+    <footer>
+        <div>
+    <p>
+        &copy; 2025 Qiu | Powered by Hexo
+    </p>
+</div>
+    </footer>
+</body>
+</html>

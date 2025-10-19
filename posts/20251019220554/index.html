@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<title>I&#39;m defined</title>
+<link rel="icon" href="/images/favicon.ico">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CRS2BQJ19C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CRS2BQJ19C');
+</script>
+
+<meta name="generator" content="Hexo 8.0.0"></head>
+<body>
+    <header>
+<nav>
+    <div class="blog-name">
+        <a href="/">I'm Defined</a>
+    </div>
+    <div class="blog-nav">
+        <a href="/">首頁</a>
+        <a href="/about/">關於我</a>
+        <a href="/archives/">文章列表</a>
+    </div>
+</nav>
+</header>
+    <main>
+        <article class="post-article">
+    <header class="post-header">
+        <div class="post-meta">
+            <span>更新日期：2025-10-19</span>
+        </div>
+        <h1>Snippy 開發日誌 Day 1</h1>
+        <div class="post-content">
+            <h2 id="前言">前言</h2>
+<p>目標是名為 Snippy 的片段程式碼管理工具，是個桌面應用。<br>
+採用 Electron + Vue 3 + TypeScript + SQLite。<br>
+但現在又增加了 CodeMirror 6 程式碼編輯器套件。<br>
+然後因為配置了 TypeScript 類型檢查，發現很多 Vue3 的核心概念。</p>
+<span id="more"></span>
+<h2 id="環境與工具">環境與工具</h2>
+<ul>
+<li>安裝了 CodeMirror 6 程式碼編輯器，選 CodeMirror 6 而非 Monaco/Ace 的原因：
+<ul>
+<li>體積小,適合 Electron</li>
+<li>TypeScript 支援好</li>
+<li>問題是語言包蠻多的，但後面再預先打包進去，用戶需要時再載入就好。</li>
+</ul>
+</li>
+<li>整合了 Markdown 編輯器（使用 <code>@codemirror/lang-markdown</code>）。</li>
+</ul>
+<h2 id="TypeScript-相關">TypeScript 相關</h2>
+<ul>
+<li>配置了 TypeScript 類型檢查</li>
+<li>TypeScript 不認識 <code>.vue</code> 副檔名，所以寫了 <code>env.d.ts</code> 類型聲明</li>
+<li><code>ref</code> 初始值影響型別推斷</li>
+</ul>
+<h2 id="Vue3-核心概念">Vue3 核心概念</h2>
+<ul>
+<li>理解了 Vue 根組件概念（<code>createApp(App)</code> 直接傳組件），就是模組化的意思。</li>
+<li>學習了單文件組件（SFC）：<code>script</code>、<code>template</code>、<code>style</code> 寫在一個 <code>.vue</code> 檔案</li>
+<li>Vue 生命週期：<code>script</code> 執行時 vs <code>onMounted()</code>（DOM 渲染後）
+<ul>
+<li>Vue需要先知道要如何渲染，它需要確認狀態跟函數，所以會先跑script，但有些函式需要等DOM渲染完才能運行，所以才有 <code>onMounted()</code></li>
+<li><code>onMounted()</code> 是個生命週期鉤子(Lifecycle Hooks)，Vue 也存在其他 HOOK</li>
+</ul>
+</li>
+<li>理解 <code>ref</code> 綁定 DOM:
+<ul>
+<li>用 <code>ref&lt;HTMLElement | null&gt;(null)</code> 初始化</li>
+<li><code>template</code> 用 <code>ref=&quot;變數名&quot;</code> 綁定</li>
+<li>Vue 自動對應同名變數</li>
+<li><code>onMounted()</code> 後才能取得 DOM 元素</li>
+</ul>
+</li>
+<li>非空斷言（<code>value!</code>）的使用時機：用來跳過檢查</li>
+<li>事件處理：使用 <code>@click</code> 聲明式綁定，不要用 <code>document.querySelector</code></li>
+<li>理解了 Scoped CSS 的作用（樣式隔離）
+<ul>
+<li>Vue 編譯後會加上獨特的屬性，這樣樣式就不會互相衝突</li>
+</ul>
+</li>
+</ul>
+<h2 id="Electron-相關">Electron 相關</h2>
+<ul>
+<li>配置了開發者工具（<code>webPreferences: { devTools: true }</code>）
+<ul>
+<li>在桌面應用下使用<code>&lt;command&gt; + &lt;option&gt; + &lt;i&gt;</code> 就可以開啟開發人員工具。</li>
+</ul>
+</li>
+<li>理解了 Electron 的 CSP 安全警告（開發環境正常）
+<ul>
+<li>Content Security Policy(內容安全政策)，開發時 Vite 需要這個才能熱重載。</li>
+<li>開發時正常，打包後會消失。</li>
+<li>設了一個「準備打包上線的檢查」筆記</li>
+</ul>
+</li>
+<li>使用 <code>vite-plugin-electron</code> 跟 Vue 一起統一編譯流程</li>
+</ul>
+
+        </div>
+    </header>
+</article>
+    </main>
+    <footer>
+        <div>
+    <p>
+        &copy; 2025 Qiu | Powered by Hexo
+    </p>
+</div>
+    </footer>
+</body>
+</html>

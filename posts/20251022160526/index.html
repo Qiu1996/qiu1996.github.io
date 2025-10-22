@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<title>I&#39;m defined</title>
+<link rel="icon" href="/images/favicon.ico">
+<link rel="stylesheet" href="/css/style.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CRS2BQJ19C"></script>
+
+<script defer>
+  hljs.highlightAll();
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CRS2BQJ19C');
+</script>
+
+<meta name="generator" content="Hexo 8.0.0"></head>
+<body>
+    <header>
+<nav>
+    <div class="blog-name">
+        <a href="/">I'm Defined</a>
+    </div>
+    <div class="blog-nav">
+        <a href="/">首頁</a>
+        <a href="/about/">關於我</a>
+        <a href="/archives/">文章列表</a>
+    </div>
+</nav>
+</header>
+    <main>
+        <article class="post-article">
+    <header class="post-header">
+        <div class="post-meta">
+            <span>更新日期：2025-10-22</span>
+        </div>
+        <h1>TypeScript 型別紀錄（長期更新）</h1>
+        <div class="post-content">
+            <p>用來紀錄在開發時遇到的型別問題。</p>
+<span id="more"></span>
+<h2 id="Electron">Electron</h2>
+<hr>
+<h4 id="BrowserWindow-titleBarStyle-類型-‘string’-不可指派">BrowserWindow titleBarStyle - 類型 ‘string’ 不可指派</h4>
+<p><strong>錯誤訊息：</strong></p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><code class="hljs rust">屬性 <span class="hljs-symbol">&#x27;titleBarStyl</span>e<span class="hljs-string">&#x27; 的類型不相容。</span><br><span class="hljs-string">類型 &#x27;</span>string<span class="hljs-string">&#x27; 不可指派給類型 &#x27;</span><span class="hljs-string">&quot;hiddenInset&quot;</span> | <span class="hljs-string">&quot;default&quot;</span> | <span class="hljs-string">&quot;hidden&quot;</span> | <span class="hljs-string">&quot;customButtonsOnHover&quot;</span> | undefined<span class="hljs-string">&#x27;。</span><br></code></pre></td></tr></table></figure>
+<p><strong>程式碼：</strong></p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">WINDOW_CONFIG</span> = &#123;<br>	...<br>	<span class="hljs-attr">titleBarStyle</span>: <span class="hljs-string">&#x27;hiddenInset&#x27;</span>,<br>	...<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">createWindow</span>(<span class="hljs-params"></span>) &#123;<br>	...<br>	<span class="hljs-keyword">const</span> win = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BrowserWindow</span>(<span class="hljs-variable constant_">WINDOW_CONFIG</span>); <span class="hljs-comment">// WINDOW_CONFIG 會有警告</span><br>	...<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>原因：</strong><br>
+<code>titleBarStyle</code> 是個有固定參數的配置，但目前在 TS 眼裡，它是個 String 型別，任何字都可以傳進去，而錯誤訊息是說，這個 String 型別不可以被指派給 <code>titleBarStyle</code> ，因為 String 型別太寬鬆了，代表任何值都可以傳入。</p>
+<p><strong>解法：</strong><br>
+使用<strong>型別斷言（Type Assertion）</strong>。添加 <code>as const</code> 後，輸入固定參數以外的字串會出現警告。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-attr">titleBarStyle</span>: <span class="hljs-string">&#x27;hiddenInset&#x27;</span> <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>,<br></code></pre></td></tr></table></figure>
+<p><strong>概念：</strong> <code>型別斷言（Type Assertion）</code>、<code>字面量型別（Literal Types）</code></p>
+<hr>
+<h2 id="Vue3">Vue3</h2>
+<hr>
+<h4 id="空陣列無法推斷型別，需要明確標註">空陣列無法推斷型別，需要明確標註</h4>
+<p><strong>錯誤訊息：</strong></p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><code class="hljs applescript">類型 &#x27;&#123; <span class="hljs-built_in">id</span>: <span class="hljs-built_in">number</span>; title: <span class="hljs-built_in">string</span>; &#125;&#x27; 的引數不可指派給類型 &#x27;never&#x27; 的參數。<br></code></pre></td></tr></table></figure>
+<p><strong>程式碼：</strong></p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> tabs = <span class="hljs-title function_">ref</span>([]);<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">addTab</span>(<span class="hljs-params"></span>)&#123;<br>	tabs.<span class="hljs-property">value</span>.<span class="hljs-title function_">push</span>(&#123;<br>		<span class="hljs-attr">id</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>(),<br>		<span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;未命名&#x27;</span><br>	&#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>原因：</strong><br>
+在TS的環境下，需要先定義陣列可以裝什麼。</p>
+<p><strong>解法：</strong> 使用 <code>interface</code> 是 <strong>定義物件結構</strong>，並使用 <code>&lt;Tab[]&gt;</code> 引用結構。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Tab</span> &#123;<br>	<span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>;<br>	<span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;<br>&#125;<br><br><span class="hljs-keyword">const</span> tabs = ref&lt;<span class="hljs-title class_">Tab</span>[]&gt;([]);<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">addTab</span>(<span class="hljs-params"></span>)&#123;<br>	tabs.<span class="hljs-property">value</span>.<span class="hljs-title function_">push</span>(&#123;<br>		<span class="hljs-attr">id</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>(),<br>		<span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;未命名&#x27;</span><br>	&#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+<hr>
+<h4 id="DOM-元素-模板引用需要標註-DOM-元素型別">DOM 元素 - 模板引用需要標註 DOM 元素型別</h4>
+<p><strong>錯誤訊息：</strong></p>
+<figure class="highlight sml"><table><tr><td class="code"><pre><code class="hljs sml">類型 <span class="hljs-symbol">&#x27;null&#x27;</span> 不可指派給類型 <span class="hljs-symbol">&#x27;Element</span> | <span class="hljs-type">DocumentFragment</span> | undefined&#x27;。<br></code></pre></td></tr></table></figure>
+<p><strong>程式碼：</strong></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">setup</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-keyword">const</span> codeEditor = <span class="hljs-title function_">ref</span>(<span class="hljs-literal">null</span>);</span><br><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> &#123;</span><br><span class="language-javascript">	...</span><br><span class="language-javascript">	<span class="hljs-keyword">let</span> view = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EditorView</span>(&#123;</span><br><span class="language-javascript">		...</span><br><span class="language-javascript">		<span class="hljs-attr">parent</span>: codeEditor.<span class="hljs-property">value</span></span><br><span class="language-javascript">		...</span><br><span class="language-javascript">	&#125;)</span><br><span class="language-javascript">	...</span><br><span class="language-javascript">&#125;)</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;codeEditArea&quot;</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;codeEditor&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><strong>原因：</strong><br>
+<code>parent</code> 要的是 DOM 元素，但 <code>ref(null)</code> 讓 TS 以為這個 <code>ref</code> 只有 <code>null</code>，所以當你把 <code>null</code> 傳給 <code>parent</code> 時就報錯了。</p>
+<p><strong>解法：</strong> 標註上<code>&lt;HTMLDivElement | null&gt;</code>，<code>| null</code> 是為了讓初始值 <code>(null)</code> 可以合法。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> codeEditor = ref&lt;<span class="hljs-title class_">HTMLDivElement</span> | <span class="hljs-literal">null</span>&gt;(<span class="hljs-literal">null</span>);<br></code></pre></td></tr></table></figure>
+<hr>
+<h4 id="非空斷言-保證-DOM-元素已經掛載">非空斷言 (!) - 保證 DOM 元素已經掛載</h4>
+<p><strong>錯誤訊息：</strong></p>
+<figure class="highlight sml"><table><tr><td class="code"><pre><code class="hljs sml">類型 <span class="hljs-symbol">&#x27;HTMLDivElement</span> | null&#x27; 不可指派給類型 <span class="hljs-symbol">&#x27;Element</span> | <span class="hljs-type">DocumentFragment</span> | undefined&#x27;。<br>類型 <span class="hljs-symbol">&#x27;null&#x27;</span> 不可指派給類型 <span class="hljs-symbol">&#x27;Element</span> | <span class="hljs-type">DocumentFragment</span> | undefined&#x27;。<br></code></pre></td></tr></table></figure>
+<p><strong>程式碼：</strong></p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> codeEditor = ref&lt;<span class="hljs-title class_">HTMLDivElement</span> | <span class="hljs-literal">null</span>&gt;(<span class="hljs-literal">null</span>);<br><br><span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>	...<br>	<span class="hljs-keyword">let</span> view = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EditorView</span>(&#123;<br>		...<br>		<span class="hljs-attr">parent</span>: codeEditor.<span class="hljs-property">value</span><br>		...<br>	&#125;)<br>	...<br>&#125;)<br></code></pre></td></tr></table></figure>
+<p><strong>原因：</strong><br>
+因為型別是 <code>HTMLDivElement | null</code>，但 <code>parent</code> 不接受 <code>null</code>。雖然 <code>onMounted</code> 後 DOM 已掛載，但 TS 無法判斷這個時機點不是 <code>null</code>。</p>
+<p><strong>解法：</strong> 加上非空斷言的驚嘆號，告訴 TS 這裡不用判斷，保證是 DOM 元素。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-attr">parent</span>: codeEditor.<span class="hljs-property">value</span>!<br></code></pre></td></tr></table></figure>
+
+        </div>
+    </header>
+</article>
+    </main>
+    <footer>
+        <div>
+    <p>
+        &copy; 2025 Qiu | Powered by Hexo
+    </p>
+</div>
+    </footer>
+</body>
+</html>

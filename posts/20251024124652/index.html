@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<title>I&#39;m defined</title>
+<link rel="icon" href="/images/favicon.ico">
+<link rel="stylesheet" href="/css/style.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CRS2BQJ19C"></script>
+
+<script defer>
+  hljs.highlightAll();
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CRS2BQJ19C');
+</script>
+
+<meta name="generator" content="Hexo 8.0.0"></head>
+<body>
+    <header>
+<nav>
+    <div class="blog-name">
+        <a href="/">I'm Defined</a>
+    </div>
+    <div class="blog-nav">
+        <a href="/">首頁</a>
+        <a href="/about/">關於我</a>
+        <a href="/archives/">文章列表</a>
+    </div>
+</nav>
+</header>
+    <main>
+        <article class="post-article">
+    <header class="post-header">
+        <div class="post-meta">
+            <span>更新日期：2025-10-24</span>
+        </div>
+        <h1>Vue 組件間的事件傳遞 emit</h1>
+        <div class="post-content">
+            <h2 id="什麼是-emit？">什麼是 <code>emit</code>？</h2>
+<p>既然在 Vue3 父組件可以透過 props 向下傳遞給子組件，那麼子組件也可以透過<code>emit</code>向上傳遞。<br>
+不像是原生 DOM 事件，層層冒泡，只是透過父組件來監聽子組件的訊號。<br>
+所以 <code>emit</code> 來自 <code>Emitting</code> ，有點像是對著父組件的監聽器發射的意思。</p>
+<span id="more"></span>
+<h2 id="使用範例">使用範例</h2>
+<h3 id="基本用法">基本用法</h3>
+<p>在子組件使用<code>@click</code>監聽，當觸發監聽，<code>$emit</code> 就會朝父組件所在的函式「發射」：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;button @click=&quot;$emit(&#x27;someEvent&#x27;)&quot;&gt;Click Me&lt;/button&gt;<br></code></pre></td></tr></table></figure>
+<p>父組件這邊設定監聽<code>@some-event</code>，當父組件監聽到<code>$emit('someEvent')</code>發射的訊號，就會觸發 <code>emoji</code> 函式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;MyComponent @some-event=&quot;emoji&quot; /&gt;<br></code></pre></td></tr></table></figure>
+<p>這邊注意到子組件跟父組件的事件監聽兩個命名不一樣，一個是駝峰式，一個是短橫線式，是Vue會自動轉換配對。</p>
+<h3 id="在子組件使用聲明式的用法">在子組件使用聲明式的用法</h3>
+<p>但這種用法，<code>defineEmits()</code>只能放在 <code>script</code> 的頂層。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>defineEmits([&#x27;someEvent&#x27;]);<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>&lt;button @click=&quot;$emit(&#x27;someEvent&#x27;)&quot;&gt;Add&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<p>可以用變數接住 <code>emit</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>const emit = defineEmits([&#x27;someEvent&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>&lt;button @click=&quot;emit(&#x27;someEvent&#x27;)&quot;&gt;Add&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<p>或是將接住的 <code>emit</code> 使用在 <code>script</code> 裡的函式發射：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>const emit = defineEmits([&#x27;someEvent&#x27;])<br><br>function buttonClick() &#123;<br>  emit(&#x27;someEvent&#x27;)<br>&#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>&lt;button @click=&quot;buttonClick&quot;&gt;Add&lt;/button&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<h3 id="支援使用修飾符">支援使用修飾符</h3>
+<p>組件事件監聽器也支援 <code>.once</code> 修飾符：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;MyComponent @some-event.once=&quot;callback&quot; /&gt;<br></code></pre></td></tr></table></figure>
+<h3 id="加入參數">加入參數</h3>
+<p>在子組件的 <code>$emit</code> 上面加入參數：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;button @click=&quot;$emit(&#x27;someEvent&#x27;, &#x27;hello&#x27;)&quot;&gt;Click Me&lt;/button&gt;<br></code></pre></td></tr></table></figure>
+<p>父組件則是在函式獲得參數：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>function emoji(event)&#123;<br>  console.log(event);<br>&#125;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;MyComponent @some-event=&quot;emoji&quot; /&gt;<br>&lt;/template&gt;<br><br></code></pre></td></tr></table></figure>
+
+        </div>
+    </header>
+</article>
+    </main>
+    <footer>
+        <div>
+    <p>
+        &copy; 2025 Qiu | Powered by Hexo
+    </p>
+</div>
+    </footer>
+</body>
+</html>

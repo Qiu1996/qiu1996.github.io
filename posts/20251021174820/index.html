@@ -37,43 +37,40 @@
         <article class="post-article">
     <header class="post-header">
         <div class="post-meta">
-            <span>更新日期：2025-10-21</span>
+            <span>更新日期：2025-10-24</span>
         </div>
-        <h1>Vue3 組件基礎 - props 傳遞</h1>
+        <h1>Vue3 組件間的資料傳遞 props</h1>
         <div class="post-content">
-            <p>因為開發遇到了 <code>emit</code> + <code>porps</code> 資料流，所以有了這個。</p>
-<span id="more"></span>
-<h2 id="什麼是-props">什麼是 <code>props</code></h2>
+            <h2 id="什麼是-props">什麼是 <code>props</code></h2>
 <p><code>props</code> 用來從父組件傳遞資料到子組件。<br>
 <code>props</code> 是 <code>Properties</code> 的縮寫，代表著依靠屬性來傳遞資料。</p>
+<span id="more"></span>
 <h2 id="基本寫法">基本寫法</h2>
 <p>結構是這樣：</p>
 <figure class="highlight livecodeserver"><table><tr><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-keyword">items</span>.vue<br>└── <span class="hljs-keyword">item</span>.vue<br></code></pre></td></tr></table></figure>
 <p><code>items.vue</code> 裡可以在 <code>item</code> 組件上自定義屬性 <code>title</code> 傳遞資料。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> import item from &quot;item.vue&quot;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;item title=&quot;content 1&quot; /&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  import item from &quot;item.vue&quot;<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;item title=&quot;content 1&quot; /&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
 <p><code>item.vue</code> 裡使用 <code>defineProps</code> 來接收 <code>title</code> 屬性，然後就可以不作任何宣告，導入模版。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>defineProps([&#x27;title&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;h4&gt;&#123;&#123; title &#125;&#125;&lt;/h4&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  defineProps([&#x27;title&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;h4&gt;&#123;&#123; title &#125;&#125;&lt;/h4&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
 <p>也可以在 <code>items.vue</code> 的模版裡面插入多個不同資料的 <code>item</code> 組件。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;item title=&quot;content 1&quot; /&gt;<br>  &lt;item title=&quot;content 2&quot; /&gt;<br>  &lt;item title=&quot;content 3&quot; /&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
 <h2 id="實務：v-for-傳物件">實務：<code>v-for</code>+ 傳物件</h2>
 <h3 id="實際資料是陣列，並用-v-for-的傳送">實際資料是陣列，並用 <code>v-for</code> 的傳送</h3>
 <ul>
-<li>
-<p>升級一點的作法，<code>items.vue</code> 可以有個陣列。</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> import item from &quot;item.vue&quot;<br> const items = ref([<br>	&#x27;content 1&#x27;,<br>	&#x27;content 2&#x27;,<br>	&#x27;content 3&#x27;<br> ])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;item v-for=&quot;item in items&quot; :title=&quot;item&quot; /&gt;<br>&lt;/template&gt;<br><br></code></pre></td></tr></table></figure>
-</li>
-<li>
-<p><code>items.vue</code> 的陣列裡面是物件。</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> import item from &quot;item.vue&quot;<br> const items = ref([<br>	&#123;id: 1, title: &quot;content&quot; &#125;,<br>	&#123;id: 2, title: &quot;content&quot; &#125;,<br>	&#123;id: 3, title: &quot;content&quot; &#125;,<br> ])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;item v-for=&quot;item in items&quot; :id=&quot;item.id&quot; :title=&quot;item.title&quot; /&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
-</li>
+<li>升級一點的作法，<code>items.vue</code> 可以有個陣列。</li>
 </ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>import item from &quot;item.vue&quot;<br>  const items = ref([<br>    &#x27;content 1&#x27;,<br>    &#x27;content 2&#x27;,<br>    &#x27;content 3&#x27;<br>  ])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;item v-for=&quot;item in items&quot; :title=&quot;item&quot; /&gt;<br>&lt;/template&gt;<br><br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>items.vue</code> 的陣列裡面是物件。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  import item from &quot;item.vue&quot;<br>  const items = ref([<br>    &#123;id: 1, title: &quot;content&quot; &#125;,<br>    &#123;id: 2, title: &quot;content&quot; &#125;,<br>    &#123;id: 3, title: &quot;content&quot; &#125;,<br>  ])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;item v-for=&quot;item in items&quot; :id=&quot;item.id&quot; :title=&quot;item.title&quot; /&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
 <h3 id="接收到資料後，直接在-template-使用">接收到資料後，直接在 template 使用</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>defineProps([&#x27;id&#x27;, &#x27;title&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;h4&gt;&#123;&#123; title &#125;&#125;&#123;&#123; id &#125;&#125;&lt;/h4&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  defineProps([&#x27;id&#x27;, &#x27;title&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;h4&gt;&#123;&#123; title &#125;&#125;&#123;&#123; id &#125;&#125;&lt;/h4&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
 <h3 id="或是先裝進變數再使用">或是先裝進變數再使用</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>const item = defineProps([&#x27;id&#x27;, &#x27;title&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;h4&gt;&#123;&#123; item.title &#125;&#125;&#123;&#123; item.id &#125;&#125;&lt;/h4&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  const item = defineProps([&#x27;id&#x27;, &#x27;title&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;h4&gt;&#123;&#123; item.title &#125;&#125;&#123;&#123; item.id &#125;&#125;&lt;/h4&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
 <h3 id="在子組件使用-v-for-渲染">在子組件使用 <code>v-for</code> 渲染</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br> import item from &quot;item.vue&quot;<br> const items = ref([<br>	&#123;id: 1, title: &quot;content&quot; &#125;,<br>	&#123;id: 2, title: &quot;content&quot; &#125;,<br>	&#123;id: 3, title: &quot;content&quot; &#125;,<br> ])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;item :items=&quot;items&quot;/&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>	defineProps([&#x27;items&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>	&lt;div v-for=&quot;item in items&quot;&gt;<br>		&lt;h4&gt;&#123;&#123; item.title &#125;&#125;&#123;&#123; item.id &#125;&#125;&lt;/h4&gt;<br>	&lt;/div&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>import item from &quot;item.vue&quot;<br>const items = ref([<br>  &#123;id: 1, title: &quot;content&quot; &#125;,<br>  &#123;id: 2, title: &quot;content&quot; &#125;,<br>  &#123;id: 3, title: &quot;content&quot; &#125;,<br>])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;item :items=&quot;items&quot;/&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;script setup&gt;<br>  defineProps([&#x27;items&#x27;])<br>&lt;/script&gt;<br><br>&lt;template&gt;<br>  &lt;div v-for=&quot;item in items&quot;&gt;<br>    &lt;h4&gt;&#123;&#123; item.title &#125;&#125;&#123;&#123; item.id &#125;&#125;&lt;/h4&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br></code></pre></td></tr></table></figure>
 
         </div>
     </header>

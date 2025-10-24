@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<title>I&#39;m defined</title>
+<link rel="icon" href="/images/favicon.ico">
+<link rel="stylesheet" href="/css/style.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CRS2BQJ19C"></script>
+
+<script defer>
+  hljs.highlightAll();
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CRS2BQJ19C');
+</script>
+
+<meta name="generator" content="Hexo 8.0.0"></head>
+<body>
+    <header>
+<nav>
+    <div class="blog-name">
+        <a href="/">I'm Defined</a>
+    </div>
+    <div class="blog-nav">
+        <a href="/">首頁</a>
+        <a href="/about/">關於我</a>
+        <a href="/archives/">文章列表</a>
+    </div>
+</nav>
+</header>
+    <main>
+        <article class="post-article">
+    <header class="post-header">
+        <div class="post-meta">
+            <span>更新日期：2025-10-24</span>
+        </div>
+        <h1>Snippy 開發日誌 Day3</h1>
+        <div class="post-content">
+            <h2 id="建立-Electron-前後端通訊管道">建立 Electron 前後端通訊管道</h2>
+<p>建立 electron/preload.ts - 橋接層<br>
+配置 main.ts - 載入 preload<br>
+配置 vite.config.js - 編譯 preload<br>
+驗證通訊 - Vue 成功讀取 window.myAPI</p>
+<span id="more"></span>
+<h2 id="過程">過程</h2>
+<ul>
+<li>建立 <code>preload.ts</code> 開啟 IPC通訊，使前後端可以溝通。</li>
+<li>配置參考：<a target="_blank" rel="noopener" href="https://dev.to/jenueldev/vue-3-vite-typescript-electron-my-full-setup-kgm">Dev.io - Vue 3 + Vite + TypeScript + ELECTRON</a></li>
+<li>設置<strong>預加載腳本</strong>[^1]，在<code>electron</code>的目錄下建立<code>preload.ts</code>，</li>
+<li>並在<code>electron/main.ts</code>的<code>WINDOE_CONFIG</code>添加<code>preload</code>配置：</li>
+</ul>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-attr">webPreferences</span>: &#123;<br>  <span class="hljs-attr">preload</span>: path.<span class="hljs-title function_">join</span>(__dirname, <span class="hljs-string">&#x27;preload.js&#x27;</span>)<br>&#125;<br><span class="hljs-comment">// 請 electron 在載入網頁前，先載入這個路徑的 preload.js。</span><br><span class="hljs-comment">// vite 在運行時，會使用 vite-plugin-electron 將 preload.ts 編譯，到靜態路徑。</span><br><span class="hljs-comment">// __dirname 就是靜態路徑的目錄。</span><br><span class="hljs-comment">// 意思就是 vite 其實的核心是能直接用 dev server 渲染 vue，但 electron 是一種 Node.js 程序，所以需要編譯才能運行。</span><br><br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>vite.coonfig.ts</code>添加配置，建立編譯設置：</li>
+</ul>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">electron</span>(&#123;<br>  <span class="hljs-attr">preload</span>: &#123;<br>    <span class="hljs-attr">input</span>: <span class="hljs-string">&#x27;electron/preload.ts&#x27;</span>,<br>    <span class="hljs-attr">vite</span>: &#123;<br>      <span class="hljs-attr">build</span>: &#123;<br>        <span class="hljs-attr">outDir</span>: <span class="hljs-string">&#x27;build/dist-electron&#x27;</span><br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;)<br><span class="hljs-comment">// preload.input = 預加載腳本輸入，意味著輸入檔案</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>在 <code>preload.ts</code> 裡面添加：</li>
+</ul>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> &#123; contextBridge &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron&#x27;</span>);<br>contextBridge.<span class="hljs-title function_">exposeInMainWorld</span>(<span class="hljs-string">&#x27;myAPI&#x27;</span>, &#123;<br>  <span class="hljs-attr">desktop</span>: <span class="hljs-literal">true</span><br>&#125;)<br><span class="hljs-comment">// 因為現在前後端處於「Context Isolation（上下文隔離）」的狀態，前端代碼無法直接存取 Node.js 或 Electron API</span><br><span class="hljs-comment">// contextBridge 是唯一合法的通道。</span><br><span class="hljs-comment">// exposeInMainWorld 會在前端的 window 物件上新增屬性，而不是修改既有屬性。</span><br><span class="hljs-comment">// 前端只能讀取，卻無法覆寫或刪除這些屬性，確保 API 的完整性。</span><br><br></code></pre></td></tr></table></figure>
+<ul>
+<li>在 Vue 檔案呼叫 <code>console.log(window.myAPI)</code> 會有回應。</li>
+</ul>
+<h2 id="其他">其他</h2>
+<p>然後在早上醒來，我突然想到馬斯克說過的某一段，我好像做了不必要的事情，導致我分心在其他地方。<br>
+所以：</p>
+<ul>
+<li>我刪掉了分頁系統，我也發現我可能不希望它跟一般筆記軟體一樣。</li>
+<li>刪掉了Markdown的編輯器，這東西讓我感到違和，所以只留下程式碼的編輯器，我想，想要為一個片段程式碼添加描述，應該有其他辦法。</li>
+<li>我改掉了 <a target="_blank" rel="noopener" href="http://README.md">README.md</a> 的架構，我覺得這有點過度規劃了，或許一開始很喜歡，但我後面就又有新想法了，不該這樣限制自己。</li>
+</ul>
+
+        </div>
+    </header>
+</article>
+    </main>
+    <footer>
+        <div>
+    <p>
+        &copy; 2025 Qiu | Powered by Hexo
+    </p>
+</div>
+    </footer>
+</body>
+</html>

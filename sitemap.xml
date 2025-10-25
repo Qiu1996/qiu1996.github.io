@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://qiu1996.github.io/posts/20251025162747/</loc>
+    
+    <lastmod>2025-10-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://qiu1996.github.io/posts/20251024195340/</loc>
     
     <lastmod>2025-10-24</lastmod>
@@ -85,7 +94,7 @@
 
   <url>
     <loc>https://qiu1996.github.io/</loc>
-    <lastmod>2025-10-24</lastmod>
+    <lastmod>2025-10-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -93,7 +102,7 @@
   
   <url>
     <loc>https://qiu1996.github.io/tags/Snippy/</loc>
-    <lastmod>2025-10-24</lastmod>
+    <lastmod>2025-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -102,28 +111,28 @@
   
   <url>
     <loc>https://qiu1996.github.io/categories/%E7%92%B0%E5%A2%83%E9%85%8D%E7%BD%AE/</loc>
-    <lastmod>2025-10-24</lastmod>
+    <lastmod>2025-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://qiu1996.github.io/categories/%E9%96%8B%E7%99%BC%E6%97%A5%E8%AA%8C/</loc>
-    <lastmod>2025-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://qiu1996.github.io/categories/Vue3/</loc>
-    <lastmod>2025-10-24</lastmod>
+    <lastmod>2025-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://qiu1996.github.io/categories/TypeScript/</loc>
-    <lastmod>2025-10-24</lastmod>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://qiu1996.github.io/categories/Vue3/</loc>
+    <lastmod>2025-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

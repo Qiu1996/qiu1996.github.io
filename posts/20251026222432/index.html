@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<title>I&#39;m defined</title>
+<link rel="icon" href="/images/favicon.ico">
+<link rel="stylesheet" href="/css/style.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CRS2BQJ19C"></script>
+
+<script defer>
+  hljs.highlightAll();
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CRS2BQJ19C');
+</script>
+
+<meta name="generator" content="Hexo 8.0.0"></head>
+<body>
+    <header>
+<nav>
+    <div class="blog-name">
+        <a href="/">I'm Defined</a>
+    </div>
+    <div class="blog-nav">
+        <a href="/">首頁</a>
+        <a href="/about/">關於我</a>
+        <a href="/archives/">文章列表</a>
+    </div>
+</nav>
+</header>
+    <main>
+        <article class="post-article">
+    <header class="post-header">
+        <div class="post-meta">
+            <span>更新日期：2025-10-26</span>
+        </div>
+        <h1>Snippy 開發日誌 Day 5</h1>
+        <div class="post-content">
+            <h2 id="今日實作">今日實作</h2>
+<ul>
+<li>將<code>app.vue</code>作為狀態管理的中心，負責接收跟輸出。</li>
+<li>將 TypeScript 型別拆出，集中管理。</li>
+<li>左側列表顯示檔案清單（SideBar.vue）</li>
+<li>點擊檔案清單，右邊的編輯區域（CodeEditor）會顯示檔案內容。</li>
+<li>左側列表的新增按鈕（AddBtn.vue）點擊下去，刷新檔案清單（SideBar.vue）。</li>
+</ul>
+<span id="more"></span>
+<h2 id="建立資料流">建立資料流</h2>
+<ul>
+<li>資料層：<code>database.ts</code></li>
+<li>IPC處理層：<code>main.ts</code></li>
+<li>橋接層：<code>preload.ts</code></li>
+<li>前端調用層：<code>app.vue</code></li>
+</ul>
+<h2 id="將app-vue作為狀態管理的中心">將<code>app.vue</code>作為狀態管理的中心</h2>
+<p>代表，只有 <code>app.vue</code> 會向 IPC 發出請求，也只有 <code>app.vue</code> 會接收到請求，並將資料分發向子組件。</p>
+<h2 id="將-TypeScript-型別拆出，集中管理">將 TypeScript 型別拆出，集中管理</h2>
+<p>在 <code>src/</code> 下面建立 <code>types</code>，集中放置型別定義：</p>
+<ul>
+<li>業務型別定義：<code>snippet.ts</code></li>
+<li>全域擴展型別：<code>electron.d.ts</code></li>
+<li>使用方法是，在需要文件上，使用 <code>import type {...} form '...'</code>引用。</li>
+<li><code>import type</code> 代表編譯的時候，這些 <code>import</code> 不需要編譯進去，也能在語意化上面表示這些是純型別。</li>
+</ul>
+<h2 id="左側列表顯示檔案清單（SideBar-vue）">左側列表顯示檔案清單（SideBar.vue）</h2>
+<ul>
+<li>行為：左側列表需要列出資料庫裡的所有檔案名稱。</li>
+<li>先從 <code>app.vue</code> 到 <code>database.ts</code>之間，建立了 <code>loadSnippets()</code>到 <code>getSnippets()</code>之間的資料流。</li>
+<li>設一個宣告<code>const snippets = ref([])</code>，將<code>app.vue</code>接收到資料的資料，裝進<code>snippets.value</code>。</li>
+<li>然後在需要接收的子組件上面設定 <code>props</code>：<code>&lt;SideBar :snippets=&quot;snippets&quot; /&gt;</code></li>
+<li><code>app.vue</code>標注型別：<code>const snippets = ref&lt;SnippetTab[]&gt;([]);</code></li>
+<li><code>SideBar.vue</code> 標注型別：<code>const props = defineProps&lt;{snippets: SnippetTab[]}&gt;();</code></li>
+</ul>
+<h2 id="點擊，顯示檔案內容（CodeEditor-vue）。">點擊，顯示檔案內容（CodeEditor.vue）。</h2>
+<ul>
+<li>行為：點擊檔案清單其中一個檔案時，右邊的編輯區要顯示檔案內容。</li>
+<li>所以從<code>SideBar.vue</code>設定<code>emit</code>，<code>app.vue</code>的 <code>&lt;SideBar /&gt;</code>要設定監聽，並由<code>app.vue</code>發出 IPC 請求 <code>selectSnippet()</code>。</li>
+<li><code>selectSnippet()</code>裡同樣設定了相對應的資料流路線<code>getSnippetById()</code>。</li>
+<li>宣告變數 <code>const currentSnippet = ref&lt;SnippetTab | null&gt;(null);</code></li>
+<li>接收到回應資料的 <code>app.vue</code>，將資料賦值到 <code>currentSnippet.value</code> 層層傳遞到 <code>CodrEditor</code>。</li>
+<li>為了讓每次選取新的 snippets 都能更新出新的畫面，在<code>CodeEditor</code>導入<code>watch</code>監聽。</li>
+<li>每當 <code>props.content</code> 有更新，帶入 <code>newContent</code>，並且判斷 CodeMirror 編輯器已經初始化 &amp;&amp; <code>newContent !== undefined</code>，便使用 CodeMirror 的更新方法 <code>dispatch()</code>，替換新的內容。</li>
+</ul>
+<h2 id="刷新檔案清單（SideBar-vue）">刷新檔案清單（SideBar.vue）</h2>
+<ul>
+<li>在 <code>SideBar.vue</code> 裡的子組件 <code>&lt;AddBtn /&gt;</code>，上面有 <code>emit</code> 事件會觸發 <code>app.vue</code> 的 <code>addNewSnippet</code> 的 IPC 請求。</li>
+<li>請求成功會回應 <code>newSnippet</code>，將 <code>newSnippet</code> 賦值到 <code>currentSnippet.value</code>，就是變更狀態。</li>
+<li>這樣在上一步 <strong>「點擊，顯示檔案內容（CodeEditor.vue）」</strong> 就已經設定好的渲染，也會跟著變動。</li>
+</ul>
+<h2 id="心得">心得</h2>
+<p>有一個發現，交給 AI 做全端功能，它會從 <code>底層 API</code> ➔ <code>註冊 API</code> ➔ <code>橋接 API</code> ➔ <code>前端 UI</code>。<br>
+但如果是我做的話，我會先 <code>前端 UI</code> ➔ <code>橋接 API</code> &amp; <code>註冊 API</code> ➔ <code>底層 API</code>，確定按鈕有接上，然後開始寫 API 要什麼資料，再回前端確定要怎麼處理資料。</p>
+
+        </div>
+    </header>
+</article>
+    </main>
+    <footer>
+        <div>
+    <p>
+        &copy; 2025 Qiu | Powered by Hexo
+    </p>
+</div>
+    </footer>
+</body>
+</html>

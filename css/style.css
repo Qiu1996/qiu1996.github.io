@@ -109,6 +109,11 @@ header nav {
     gap: 10px;
 }
 
+.article-card .card-content ul {
+    list-style-position: outside;
+    padding-left: 30px;
+}
+
 .article-card .card-footer {
     display: flex;
     justify-content: space-between;

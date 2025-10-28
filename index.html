@@ -37,65 +37,6 @@
         <div class="article-list">
 
     
-    <a class="article-card" href="/posts/20251026222432/">
-    <div class="card-content">
-        <h2>Snippy 開發日誌 Day 5</h2>
-        <p><h2 id="今日實作">今日實作</h2>
-<ul>
-<li>將<code>app.vue</code>作為狀態管理的中心，負責接收跟輸出。</li>
-<li>將 TypeScript 型別拆出，集中管理。</li>
-<li>左側列表顯示檔案清單（SideBar.vue）</li>
-<li>點擊檔案清單，右邊的編輯區域（CodeEditor）會顯示檔案內容。</li>
-<li>左側列表的新增按鈕（AddBtn.vue）點擊下去，刷新檔案清單（SideBar.vue）。</li>
-</ul></p>
-    </div>
-    <div class="card-footer">
-        <div class="card-dates">
-            <span>更新日期：2025-10-26</span>
-        </div>
-        <span class="read-more">閱讀更多>></span>
-    </div>
-</a>
-
-    
-    <a class="article-card" href="/posts/20251025162747/">
-    <div class="card-content">
-        <h2>Snippy 開發日誌 Day 4</h2>
-        <p><h2 id="做了這些事情">做了這些事情:</h2>
-<p>建立資料庫模組，並且在應用程式載入時，自動初始化。<br>
-初始化時，會確定檔案路徑的存在，跟建立目錄、<code>sqlite3.db</code>。<br>
-處理<code>better-sqlite3</code>打包的問題，vite 的 Rollup 無法也不需要編譯 <code>better-sqlite3</code>。<br>
-然後建立新增Snippet的功能，每次點擊新增，都會在指定目錄建立檔案，以及在資料庫建立該檔案資料。<br>
-這種桌面應用，主進程跟渲染進程之間使用 IPC（進程間通訊）溝通。<br>
-IPC 概念類似網站的 API，但 IPC 是本地通訊，不走網路，速度更快。</p></p>
-    </div>
-    <div class="card-footer">
-        <div class="card-dates">
-            <span>更新日期：2025-10-26</span>
-        </div>
-        <span class="read-more">閱讀更多>></span>
-    </div>
-</a>
-
-    
-    <a class="article-card" href="/posts/20251024195340/">
-    <div class="card-content">
-        <h2>Snippy 開發日誌 Day3</h2>
-        <p><h2 id="建立-Electron-前後端通訊管道">建立 Electron 前後端通訊管道</h2>
-<p>建立 electron/preload.ts - 橋接層<br>
-配置 main.ts - 載入 preload<br>
-配置 vite.config.js - 編譯 preload<br>
-驗證通訊 - Vue 成功讀取 window.myAPI</p></p>
-    </div>
-    <div class="card-footer">
-        <div class="card-dates">
-            <span>更新日期：2025-10-26</span>
-        </div>
-        <span class="read-more">閱讀更多>></span>
-    </div>
-</a>
-
-    
     <a class="article-card" href="/posts/20251024124652/">
     <div class="card-content">
         <h2>Vue 組件間的事件傳遞 emit</h2>
@@ -137,41 +78,6 @@ IPC 概念類似網站的 API，但 IPC 是本地通訊，不走網路，速度�
     <div class="card-footer">
         <div class="card-dates">
             <span>更新日期：2025-10-24</span>
-        </div>
-        <span class="read-more">閱讀更多>></span>
-    </div>
-</a>
-
-    
-    <a class="article-card" href="/posts/20251020204121/">
-    <div class="card-content">
-        <h2>Snippy 開發日誌 Day 2</h2>
-        <p><h2 id="前言">前言</h2>
-<p>在刷 Threads 的時候看到「一致性原則（P則Q，非Q則非P）」，所以就加進專案了。<br>
-因為有 AI 所以可以衝很快，但也不好衝太快。然後要一直跟他重複對話也很煩，所以寫進 README.md 了，原來這是規格驅動嗎？<br>
-然後第一次使用 TypeScript 型別檢查，雖然不檢查也能跑動，卻發現認真檢視會有新發現，紅色波浪線應該消失吧？</p></p>
-    </div>
-    <div class="card-footer">
-        <div class="card-dates">
-            <span>更新日期：2025-10-26</span>
-        </div>
-        <span class="read-more">閱讀更多>></span>
-    </div>
-</a>
-
-    
-    <a class="article-card" href="/posts/20251019220554/">
-    <div class="card-content">
-        <h2>Snippy 開發日誌 Day 1</h2>
-        <p><h2 id="前言">前言</h2>
-<p>目標是名為 Snippy 的片段程式碼管理工具，是個桌面應用。<br>
-採用 Electron + Vue 3 + TypeScript + SQLite。<br>
-但現在又增加了 CodeMirror 6 程式碼編輯器套件。<br>
-然後因為配置了 TypeScript 類型檢查，發現很多 Vue3 的核心概念。</p></p>
-    </div>
-    <div class="card-footer">
-        <div class="card-dates">
-            <span>更新日期：2025-10-26</span>
         </div>
         <span class="read-more">閱讀更多>></span>
     </div>
